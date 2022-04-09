@@ -1,1 +1,1 @@
-worker: python reddit_oculus2_pythonanywhere.py
+worker: python reddit_oculus2_heroku.py
