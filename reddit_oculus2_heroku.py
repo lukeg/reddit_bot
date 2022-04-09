@@ -38,12 +38,12 @@ async def submit_offer(reddit, highPerformanceMode = False):
 
     async for submission in subreddit.stream.submissions(**mode):
         now = dt.datetime.now()
-        if highPerformanceMode:
-            print(now, end=' ')
-            if submission is not None:
-                print (submission.title)
-            else:
-                print()
+
+        print(now, end=' ')
+        if submission is not None:
+            print (submission.title)
+        else:
+            print()
 
         if submission is None:
             continue
