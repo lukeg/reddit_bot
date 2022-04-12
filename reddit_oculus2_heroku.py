@@ -50,7 +50,7 @@ async def submit_offer(reddit, highPerformanceMode = False):
         if "Daily Referral Megathread" in submission.title:
             created = dt.datetime.fromtimestamp(submission.created)
             print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!Found daily megathread at {now}, created at {created}")
-            if now - created < dt.timedelta(minutes=5) and \
+            if now - created < dt.timedelta(minutes=5*60) and \
                     submission.id not in submitted_ids:
                 print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!Adding a message to {submission.url} at {dt.datetime.now()}")
                 await submission.reply("""# Global (non-US) referral:
