@@ -21,13 +21,13 @@ def comment_is_top_level(comment, submission):
 async def high_performance_mode_switcher (reddit, offer_task, offer_task_in_high_performance_mode = False):
     while True:
         now = dt.datetime.now()
-        high_performance_mode_time = (dt.time(hour=16, minute=59, second=30) <= now.time() <= dt.time(hour=17, minute=1, second=30))
+        high_performance_mode_time = (dt.time(hour=14, minute=59, second=30) <= now.time() <= dt.time(hour=15, minute=1, second=30))
         if high_performance_mode_time ^ offer_task_in_high_performance_mode:
             print (f"Cancelled offer_task at {dt.datetime.now()}")
             offer_task.cancel()
             offer_task_in_high_performance_mode = not offer_task_in_high_performance_mode
             print (f"Restarting offer_task at {dt.datetime.now()}, high performance mode = {offer_task_in_high_performance_mode}")
-            offer_task = asyncio.create_task(restarter(submit_offer, reddit, offer_task_in_high_performance_mode))
+            offer_task = asyncio.create_task(submit_offer(reddit, offer_task_in_high_performance_mode))
         await asyncio.sleep(25)
 
 submitted_ids = set()
@@ -73,16 +73,13 @@ async def restarter2 (task, *args, **kwargs):
             print (f"Task failed, restarting, exception: {e}")
             await asyncio.sleep(5*60)
 
-async def restarter (task, *args, **kwargs):
-    await (task(*args, **kwargs))
-
 
 async def amain():
     async with asyncpraw.Reddit(refresh_token=refresh_token,
                                 client_id=client_id,
                                 client_secret=client_secret,
                                 user_agent=user_agent) as reddit:
-        new_daily_thread = asyncio.create_task(restarter(submit_offer, reddit))
+        new_daily_thread = asyncio.create_task(submit_offer(reddit))
         high_performance_mode = asyncio.create_task(high_performance_mode_switcher(reddit, new_daily_thread))
 
         await high_performance_mode
