@@ -25,6 +25,10 @@ async def high_performance_mode_switcher (reddit, offer_task, offer_task_in_high
         if high_performance_mode_time ^ offer_task_in_high_performance_mode:
             print (f"Cancelled offer_task at {dt.datetime.now()}")
             offer_task.cancel()
+            try:
+                await offer_task
+            except asyncio.CancelledError:
+                pass
             offer_task_in_high_performance_mode = not offer_task_in_high_performance_mode
             print (f"Restarting offer_task at {dt.datetime.now()}, high performance mode = {offer_task_in_high_performance_mode}")
             offer_task = asyncio.create_task(submit_offer(reddit, offer_task_in_high_performance_mode))
