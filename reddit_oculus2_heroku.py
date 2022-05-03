@@ -8,7 +8,7 @@ client_id = os.getenv("client_id")
 client_secret = os.getenv("client_secret")
 refresh_token = os.getenv("refresh_token")
 
-user_agent = "Linux:oculus_async_bot_oauth:0.01 (by /u/lukeg55)"
+user_agent = "Linux:oculus_async_bot_oauth:0.02 (by /u/lukeg55)"
 
 
 
