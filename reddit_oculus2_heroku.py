@@ -64,9 +64,9 @@ class Submitter:
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!Adding a message to {submission.url} at {dt.datetime.now()}")
                     await submission.reply("""# Global (non-US) referral:
                     
-    [https://www.oculus.com/referrals/link/lukeg55/](https://www.oculus.com/referrals/link/lukeg55/)
+[https://www.oculus.com/referrals/link/lukeg55/](https://www.oculus.com/referrals/link/lukeg55/)
     
-    Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook for my referral to work. Simply use this link. I have already successuflly referred people from EU, UK, UKR, Canada, AUS. DM me if you still need the link on Facebook/Messenger.""")
+Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook for my referral to work. Simply use this link. I have already successuflly referred people from EU, UK, UKR, Canada, AUS. DM me if you still need the link on Facebook/Messenger.""")
                     self.submitted_ids.add(submission.id)
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!! submission added at {dt.datetime.now()}")
 
