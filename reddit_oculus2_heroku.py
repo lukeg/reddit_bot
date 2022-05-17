@@ -35,10 +35,17 @@ async def high_performance_mode_switcher (reddit, offer_task, submitter, offer_t
         await asyncio.sleep(25)
 
 class Submitter:
-    def __init__(self, subreddit_name, thread_title):
+    DEFAULT_TEXT = """# Global (non-US) referral:
+                    
+[https://www.oculus.com/referrals/link/lukeg55/](https://www.oculus.com/referrals/link/lukeg55/)
+    
+Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook for my referral to work. Simply use this link. I have already successuflly referred people from EU, UK, UKR, Canada, AUS. DM me if you still need the link on Facebook/Messenger."""
+    
+    def __init__(self, subreddit_name, thread_title, text=DEFAULT_TEXT):
         self.submitted_ids = set()
         self.subreddit_name = subreddit_name
         self.thread_titile = thread_title
+        self.text = text
 
     async def submit_offer(self, reddit, highPerformanceMode = False):
         subreddit = await reddit.subreddit(self.subreddit_name)
@@ -62,11 +69,7 @@ class Submitter:
                 if now - created < dt.timedelta(minutes=30) and \
                         submission.id not in self.submitted_ids:
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!Adding a message to {submission.url} at {dt.datetime.now()}")
-                    await submission.reply("""# Global (non-US) referral:
-                    
-[https://www.oculus.com/referrals/link/lukeg55/](https://www.oculus.com/referrals/link/lukeg55/)
-    
-Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook for my referral to work. Simply use this link. I have already successuflly referred people from EU, UK, UKR, Canada, AUS. DM me if you still need the link on Facebook/Messenger.""")
+                    await submission.reply(self.text)
                     self.submitted_ids.add(submission.id)
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!! submission added at {dt.datetime.now()}")
 
@@ -89,7 +92,9 @@ async def amain():
                                 client_secret=client_secret,
                                 user_agent=user_agent) as reddit:
 
-        oculus_quest_reddit = Submitter("OculusQuest", "Daily Referral Megathread")
+        oculus_quest_reddit = Submitter("OculusQuest", "Daily Referral Megathread", """Region: Worldwide/global/non-US (EU, GB, AUS, CA, UKR, ZA, ...)
+
+Referral Link : https://www.oculus.com/referrals/link/lukeg55/""")
         oculus_reddit = Submitter("Oculus", "[Monthly] Referral Sharing Thread")
         new_daily_thread = asyncio.create_task(oculus_quest_reddit.submit_offer(reddit))
         monthly_thread = asyncio.create_task(oculus_reddit.submit_offer(reddit))
