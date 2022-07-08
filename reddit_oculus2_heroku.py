@@ -16,12 +16,25 @@ def comment_is_top_level(comment, submission):
     return comment.parent_id.endswith(submission.id)
 
 
-
+class HPFModeUpdater:
+    def __init__(self):
+        self.start_time = dt.time(hour=14, minute=59, second=30)
+        self.end_time = self.start_time + dt.timedelta(minutes=2)
+        
+    def set_new_time(self, new_start_time):
+        self.start_time = new_start_time - dt.timedelta(minutes=1)
+        self.end_time = self.start_time + dt.timedelta(minutes=2)
+    
+    def get_hpf_mode_range(self):
+        return (self.start_time, self.end_time)
+    
 
 async def high_performance_mode_switcher (reddit, offer_task, submitter, offer_task_in_high_performance_mode = False):
+    time_updater = HPFModeUpdater()
     while True:
         now = dt.datetime.now()
-        high_performance_mode_time = (dt.time(hour=14, minute=59, second=30) <= now.time() <= dt.time(hour=15, minute=1, second=30))
+        start, stop = time_updater.get_hpf_mode_range()
+        high_performance_mode_time = (start <= now.time() <= stop)
         if high_performance_mode_time ^ offer_task_in_high_performance_mode:
             print (f"Cancelled offer_task at {dt.datetime.now()}")
             offer_task.cancel()
@@ -31,7 +44,7 @@ async def high_performance_mode_switcher (reddit, offer_task, submitter, offer_t
                 pass
             offer_task_in_high_performance_mode = not offer_task_in_high_performance_mode
             print (f"Restarting offer_task at {dt.datetime.now()}, high performance mode = {offer_task_in_high_performance_mode}")
-            offer_task = asyncio.create_task(submitter.submit_offer(reddit, offer_task_in_high_performance_mode))
+            offer_task = asyncio.create_task(submitter.submit_offer(reddit, offer_task_in_high_performance_mode, time_updater))
         await asyncio.sleep(25)
 
 class Submitter:
@@ -47,7 +60,7 @@ Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook
         self.thread_titile = thread_title
         self.text = text
 
-    async def submit_offer(self, reddit, highPerformanceMode = False):
+    async def submit_offer(self, reddit, highPerformanceMode = False, time_updater = None):
         subreddit = await reddit.subreddit(self.subreddit_name)
 
         mode = { "pause_after" : 0} if highPerformanceMode else {}
@@ -71,6 +84,7 @@ Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!Adding a message to {submission.url} at {dt.datetime.now()}")
                     await submission.reply(self.text)
                     self.submitted_ids.add(submission.id)
+                    if time_updater is not None: time_updater.set_new_time(now)
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!! submission added at {dt.datetime.now()}")
 
 async def restarter (task, *args, **kwargs):
