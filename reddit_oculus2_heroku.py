@@ -22,9 +22,9 @@ class HPFModeUpdater:
         self.end_time = self.start_time + dt.timedelta(minutes=2)
         
     def set_new_time(self, new_start_time):
-        self.start_time = new_start_time - dt.timedelta(minutes=1)
-        self.end_time = self.start_time + dt.timedelta(minutes=2)
-    
+        self.start_time = (dt.datetime.combine(dt.date.today(), new_start_time) - dt.timedelta(minutes=1)).time()
+        self.end_time = (dt.datetime.combine(dt.date.today(), self.start_time) + dt.timedelta(minutes=2)).time()
+                      
     def get_hpf_mode_range(self):
         return (self.start_time, self.end_time)
     
@@ -79,7 +79,7 @@ Hi, non-US referral. Even outside of US, we don't have to be friends on Facebook
             if self.thread_titile in submission.title:
                 created = dt.datetime.fromtimestamp(submission.created)
                 print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!Found daily megathread at {now}, created at {created}")
-                if now - created < dt.timedelta(minutes=30) and \
+                if now - created < dt.timedelta(hours=1,minutes=30) and \
                         submission.id not in self.submitted_ids:
                     print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!Adding a message to {submission.url} at {dt.datetime.now()}")
                     await submission.reply(self.text)
