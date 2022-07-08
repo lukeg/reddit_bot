@@ -8,7 +8,7 @@ client_id = os.getenv("client_id")
 client_secret = os.getenv("client_secret")
 refresh_token = os.getenv("refresh_token")
 
-user_agent = "Linux:oculus_async_bot_oauth:0.02 (by /u/lukeg55)"
+user_agent = "Linux:oculus_async_bot_oauth:0.03 (by /u/lukeg55)"
 
 
 
@@ -19,7 +19,7 @@ def comment_is_top_level(comment, submission):
 class HPFModeUpdater:
     def __init__(self):
         self.start_time = dt.time(hour=14, minute=59, second=30)
-        self.end_time = self.start_time + dt.timedelta(minutes=2)
+        self.end_time = (dt.datetime.combine(dt.date.today(), self.start_time) + dt.timedelta(minutes=2)).time()
         
     def set_new_time(self, new_start_time):
         self.start_time = (dt.datetime.combine(dt.date.today(), new_start_time) - dt.timedelta(minutes=1)).time()
