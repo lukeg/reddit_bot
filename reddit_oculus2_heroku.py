@@ -18,7 +18,7 @@ def comment_is_top_level(comment, submission):
 
 class HPFModeUpdater:
     def __init__(self):
-        self.start_time = dt.time(hour=14, minute=59, second=30)
+        self.start_time = dt.time(hour=18, minute=59, second=30)
         self.end_time = (dt.datetime.combine(dt.date.today(), self.start_time) + dt.timedelta(minutes=2)).time()
         
     def set_new_time(self, new_start_time):
