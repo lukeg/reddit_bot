@@ -106,7 +106,7 @@ async def amain():
                                 client_secret=client_secret,
                                 user_agent=user_agent) as reddit:
 
-        oculus_quest_reddit = Submitter("OculusQuest", "Daily Referral Megathread", """Region: Worldwide/global/non-US (EU, UK, AUS, CA, UKR, ZA, MEX, ...)
+        oculus_quest_reddit = Submitter("OculusQuest", "Weekly Referral Megathread", """Region: Worldwide/global/non-US (EU, UK, AUS, CA, UKR, ZA, MEX, ...)
 
 Referral Link : https://www.oculus.com/referrals/link/lukeg55/""")
         oculus_reddit = Submitter("Oculus", "[Monthly] Referral Sharing Thread")
